@@ -8,16 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.type.BlobType;
+
 
 @Entity
 @Table(name="users")
-@SequenceGenerator(name="user_seq", sequenceName="users_seq", allocationSize=1)
+@SequenceGenerator(name="users_seq", sequenceName="users_seq", allocationSize=1)
 public class User {
-
 	
 	@Id
 	@Column(name="userid")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user_seq")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="users_seq")
 	private int userId;
 	
 	@Column(name="username")
@@ -32,16 +33,26 @@ public class User {
 	@Column(name="aboutme")
 	private String aboutMe;
 	
+	// A little funky, not sure if BlobType is the correct type
 	@Column(name="avatar")
-	private byte Avatar;
+	private BlobType avatar;
 	
 	@Column(name="score")
-	private int Score;
+	private int score;
+	
+	@Column(name="retired")
+	private int retired;
+	
+	@Column(name="securityquestion")
+	private String securityquestion;
+	
+	@Column(name="securityanswer")
+	private String securityanswer;
 	
 	public User() {
 		super();
 	}
-
+	
 	public User(String username, String password, String email) {
 		super();
 		this.username = username;
@@ -49,33 +60,27 @@ public class User {
 		this.email = email;
 	}
 
-	public User(String username, String password, String email, byte avatar) {
+	public User(int userId, String username, String password, String email) {
 		super();
+		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		Avatar = avatar;
 	}
 
-	public User(int userId, String username, String password, String email, String aboutMe, byte avatar) {
+	public User(int userId, String username, String password, String email, String aboutMe, BlobType avatar, int score,
+			int retired, String securityquestion, String securityanswer) {
 		super();
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.aboutMe = aboutMe;
-		Avatar = avatar;
-	}
-
-	public User(int userId, String username, String password, String email, String aboutMe, byte avatar, int score) {
-		super();
-		this.userId = userId;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.aboutMe = aboutMe;
-		Avatar = avatar;
-		Score = score;
+		this.avatar = avatar;
+		this.score = score;
+		this.retired = retired;
+		this.securityquestion = securityquestion;
+		this.securityanswer = securityanswer;
 	}
 
 	public int getUserId() {
@@ -118,31 +123,58 @@ public class User {
 		this.aboutMe = aboutMe;
 	}
 
-	public byte getAvatar() {
-		return Avatar;
+	public BlobType getavatar() {
+		return avatar;
 	}
 
-	public void setAvatar(byte avatar) {
-		Avatar = avatar;
+	public void setavatar(BlobType avatar) {
+		this.avatar = avatar;
 	}
 
-	public int getScore() {
-		return Score;
+	public int getscore() {
+		return score;
 	}
 
-	public void setScore(int score) {
-		Score = score;
+	public void setscore(int score) {
+		this.score = score;
+	}
+	
+	public int isRetired() {
+		return retired;
 	}
 
+	public void setRetired(int retired) {
+		this.retired = retired;
+	}
+
+	public String getSecurityquestion() {
+		return securityquestion;
+	}
+
+	public void setSecurityquestion(String securityquestion) {
+		this.securityquestion = securityquestion;
+	}
+
+	public String getSecurityanswer() {
+		return securityanswer;
+	}
+
+	public void setSecurityanswer(String securityanswer) {
+		this.securityanswer = securityanswer;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Avatar;
-		result = prime * result + Score;
 		result = prime * result + ((aboutMe == null) ? 0 : aboutMe.hashCode());
+		result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + retired;
+		result = prime * result + score;
+		result = prime * result + ((securityanswer == null) ? 0 : securityanswer.hashCode());
+		result = prime * result + ((securityquestion == null) ? 0 : securityquestion.hashCode());
 		result = prime * result + userId;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -157,14 +189,15 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (Avatar != other.Avatar)
-			return false;
-		if (Score != other.Score)
-			return false;
 		if (aboutMe == null) {
 			if (other.aboutMe != null)
 				return false;
 		} else if (!aboutMe.equals(other.aboutMe))
+			return false;
+		if (avatar == null) {
+			if (other.avatar != null)
+				return false;
+		} else if (!avatar.equals(other.avatar))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -175,6 +208,20 @@ public class User {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
+			return false;
+		if (retired != other.retired)
+			return false;
+		if (score != other.score)
+			return false;
+		if (securityanswer == null) {
+			if (other.securityanswer != null)
+				return false;
+		} else if (!securityanswer.equals(other.securityanswer))
+			return false;
+		if (securityquestion == null) {
+			if (other.securityquestion != null)
+				return false;
+		} else if (!securityquestion.equals(other.securityquestion))
 			return false;
 		if (userId != other.userId)
 			return false;
@@ -189,7 +236,14 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", aboutMe=" + aboutMe + ", Avatar=" + Avatar + ", Score=" + Score + "]";
+				+ ", aboutMe=" + aboutMe + ", avatar=" + avatar + ", score=" + score + ", retired=" + retired
+				+ ", securityquestion=" + securityquestion + ", securityanswer=" + securityanswer + "]";
 	}
+
+	
+
+
+
+	
 
 }
