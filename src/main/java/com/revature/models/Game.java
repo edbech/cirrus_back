@@ -11,8 +11,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="games")
-@SequenceGenerator(name="game_seq", sequenceName="games_seq", allocationSize=1)
+@Table(name="game")
+@SequenceGenerator(name="game_seq", sequenceName="game_seq", allocationSize=1)
 public class Game {
 	
 	@Id
@@ -39,16 +39,20 @@ public class Game {
 	private Timestamp finished;
 	
 	@Column(name="ispublic")
-	private boolean isPublic;
+	private int isPublic;
+	
+	public Game() {
+		super();
+	}
 
-	public Game(int playerX, int playerO, boolean isPublic) {
+	public Game(int playerX, int playerO, int isPublic) {
 		super();
 		this.playerX = playerX;
 		this.playerO = playerO;
 		this.isPublic = isPublic;
 	}
 
-	public Game(int gameId, int playerX, int playerO, String gamestate, Timestamp started, boolean isPublic) {
+	public Game(int gameId, int playerX, int playerO, String gamestate, Timestamp started, int isPublic) {
 		super();
 		this.gameId = gameId;
 		this.playerX = playerX;
@@ -59,7 +63,7 @@ public class Game {
 	}
 
 	public Game(int gameId, int playerX, int playerO, String gamestate, String result, Timestamp started,
-			Timestamp finished, boolean isPublic) {
+			Timestamp finished, int isPublic) {
 		super();
 		this.gameId = gameId;
 		this.playerX = playerX;
@@ -127,11 +131,11 @@ public class Game {
 		this.finished = finished;
 	}
 
-	public boolean isPublic() {
+	public int isPublic() {
 		return isPublic;
 	}
 
-	public void setPublic(boolean isPublic) {
+	public void setPublic(int isPublic) {
 		this.isPublic = isPublic;
 	}
 
@@ -142,7 +146,7 @@ public class Game {
 		result = prime * result + ((finished == null) ? 0 : finished.hashCode());
 		result = prime * result + gameId;
 		result = prime * result + ((gamestate == null) ? 0 : gamestate.hashCode());
-		result = prime * result + (isPublic ? 1231 : 1237);
+		result = prime * result + isPublic;
 		result = prime * result + playerO;
 		result = prime * result + playerX;
 		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
