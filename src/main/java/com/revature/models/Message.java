@@ -11,8 +11,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="messages")
-@SequenceGenerator(name="message_seq", sequenceName="messages_seq", allocationSize=1)
+@Table(name="message")
+@SequenceGenerator(name="message_seq", sequenceName="message_seq", allocationSize=1)
 public class Message {
 	
 	@Id
@@ -23,8 +23,8 @@ public class Message {
 	@Column(name="sender")
 	private int sender;
 	
-	@Column(name="reciever")
-	private int reciever;
+	@Column(name="receiver")
+	private int receiver;
 	
 	@Column(name="gameid")
 	private int gameId;
@@ -34,21 +34,40 @@ public class Message {
 	
 	@Column(name="timesent")
 	private Timestamp timesent;
+	
+	public Message() {
+		super();
+	}
 
-	public Message(int messageId, int sender, int reciever, String message, Timestamp timesent) {
+	public Message(int sender, int receiver, String message) {
+		super();
+		this.sender = sender;
+		this.receiver = receiver;
+		this.message = message;
+	}
+
+	public Message(int sender, int receiver, int gameId, String message) {
+		super();
+		this.sender = sender;
+		this.receiver = receiver;
+		this.gameId = gameId;
+		this.message = message;
+	}
+
+	public Message(int messageId, int sender, int receiver, String message, Timestamp timesent) {
 		super();
 		this.messageId = messageId;
 		this.sender = sender;
-		this.reciever = reciever;
+		this.receiver = receiver;
 		this.message = message;
 		this.timesent = timesent;
 	}
 
-	public Message(int messageId, int sender, int reciever, int gameId, String message, Timestamp timesent) {
+	public Message(int messageId, int sender, int receiver, int gameId, String message, Timestamp timesent) {
 		super();
 		this.messageId = messageId;
 		this.sender = sender;
-		this.reciever = reciever;
+		this.receiver = receiver;
 		this.gameId = gameId;
 		this.message = message;
 		this.timesent = timesent;
@@ -70,12 +89,12 @@ public class Message {
 		this.sender = sender;
 	}
 
-	public int getReciever() {
-		return reciever;
+	public int getreceiver() {
+		return receiver;
 	}
 
-	public void setReciever(int reciever) {
-		this.reciever = reciever;
+	public void setreceiver(int receiver) {
+		this.receiver = receiver;
 	}
 
 	public int getGameId() {
@@ -109,7 +128,7 @@ public class Message {
 		result = prime * result + gameId;
 		result = prime * result + ((message == null) ? 0 : message.hashCode());
 		result = prime * result + messageId;
-		result = prime * result + reciever;
+		result = prime * result + receiver;
 		result = prime * result + sender;
 		result = prime * result + ((timesent == null) ? 0 : timesent.hashCode());
 		return result;
@@ -133,7 +152,7 @@ public class Message {
 			return false;
 		if (messageId != other.messageId)
 			return false;
-		if (reciever != other.reciever)
+		if (receiver != other.receiver)
 			return false;
 		if (sender != other.sender)
 			return false;
@@ -147,7 +166,7 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return "Message [messageId=" + messageId + ", sender=" + sender + ", reciever=" + reciever + ", gameId="
+		return "Message [messageId=" + messageId + ", sender=" + sender + ", receiver=" + receiver + ", gameId="
 				+ gameId + ", message=" + message + ", timesent=" + timesent + "]";
 	}	
 	
