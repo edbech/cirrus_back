@@ -5,10 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.type.BlobType;
 
 
 @Entity
@@ -33,9 +33,9 @@ public class User {
 	@Column(name="aboutme")
 	private String aboutMe;
 	
-	// A little funky, not sure if BlobType is the correct type
+	@Lob
 	@Column(name="avatar")
-	private BlobType avatar;
+	private byte[] avatar;
 	
 	@Column(name="score")
 	private int score;
@@ -68,7 +68,7 @@ public class User {
 		this.email = email;
 	}
 
-	public User(int userId, String username, String password, String email, String aboutMe, BlobType avatar, int score,
+	public User(int userId, String username, String password, String email, String aboutMe, byte[] avatar, int score,
 			int retired, String securityquestion, String securityanswer) {
 		super();
 		this.userId = userId;
@@ -123,11 +123,11 @@ public class User {
 		this.aboutMe = aboutMe;
 	}
 
-	public BlobType getavatar() {
+	public byte[] getavatar() {
 		return avatar;
 	}
 
-	public void setavatar(BlobType avatar) {
+	public void setavatar(byte[] avatar) {
 		this.avatar = avatar;
 	}
 

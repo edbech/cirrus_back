@@ -20,7 +20,7 @@ public class App
 		
 		// Create a new user
 		System.out.println("Creating new user object...");
-		User user_1 = new User("Fadi", "Alzoubi", "fa@gmail.com");
+		User user_1 = new User("Ankit", "Patel", "ap@gmail.com");
 		System.out.println(user_1);
 		
 		// Start a transaction
