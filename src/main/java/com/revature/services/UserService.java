@@ -7,9 +7,11 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Service;
 
 import com.revature.models.User;
 
+@Service
 public class UserService {
 
 	public UserService() {
@@ -48,7 +50,7 @@ public class UserService {
 		return myUser;
 	}
 
-	public List<User> getUserByCredentials(String username, String password) {
+	public User getUserByCredentials(String username, String password) {
 		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
 				.buildSessionFactory();
 
@@ -67,9 +69,9 @@ public class UserService {
 		query.setParameter("password", password);
 
 		// Retrieve the results into a list of users
-		List<User> users = query.getResultList();
+		User user = (User) query.getSingleResult();
 		factory.close();
-		return users;
+		return user;
 	}
 
 	public String recoveryQuestion(String username) {
