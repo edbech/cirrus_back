@@ -139,6 +139,14 @@ public class Game {
 		this.isPublic = isPublic;
 	}
 
+	public int getIsPublic() {
+		return isPublic;
+	}
+
+	public void setIsPublic(int isPublic) {
+		this.isPublic = isPublic;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
