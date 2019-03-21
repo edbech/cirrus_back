@@ -89,11 +89,11 @@ public class Message {
 		this.sender = sender;
 	}
 
-	public int getreceiver() {
+	public int getReceiver() {
 		return receiver;
 	}
 
-	public void setreceiver(int receiver) {
+	public void setReceiver(int receiver) {
 		this.receiver = receiver;
 	}
 
