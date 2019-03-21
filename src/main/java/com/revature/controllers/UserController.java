@@ -35,7 +35,7 @@ private UserService service;
 	
 	
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public User getCardById(@PathVariable int id) {
+	public User getUserById(@PathVariable int id) {
 		return service.getUserById(id);
 	}
 	
