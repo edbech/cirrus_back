@@ -23,6 +23,8 @@ hs_err_pid*
 
 # # Created by https://www.gitignore.io/api/eclipse 
 
+# target folder
+target/
 
 ### Eclipse ### 
 .metadata 
