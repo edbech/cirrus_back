@@ -89,8 +89,5 @@ RemoteSystemsTempFiles/
 # package-lock.json
 package-lock.json
 
-# hibernate config xml
-hibernate.cfg.xml
-
 # sonarlint modules
 .sonarlint
