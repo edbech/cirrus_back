@@ -15,7 +15,7 @@
 		<property name="hibernate.connection.password">happyheartyherbivor3</property>
 
 		<!-- JDBC connection pool setting -->
-		<property name="connection.pool_size">1</property>
+		<property name="connection.pool_size">20</property>
 
 		<!-- Select our SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
