@@ -29,7 +29,7 @@ public class GameController {
 	}
 	
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<Game> getAllUsers(){
+	public List<Game> getAllGames(){
 		return service.getAll();
 	}
 	

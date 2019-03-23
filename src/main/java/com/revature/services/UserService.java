@@ -28,6 +28,7 @@ public class UserService {
 
 		System.out.println("\nRetrieving all users");
 
+		@SuppressWarnings("unchecked")
 		List<User> users = session.createQuery("from User").getResultList();
 		factory.close();
 		return users;
