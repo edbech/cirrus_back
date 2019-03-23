@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.util.Arrays;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -123,23 +125,23 @@ public class User {
 		this.aboutMe = aboutMe;
 	}
 
-	public byte[] getavatar() {
+	public byte[] getAvatar() {
 		return avatar;
 	}
 
-	public void setavatar(byte[] avatar) {
+	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
 	}
 
-	public int getscore() {
+	public int getScore() {
 		return score;
 	}
 
-	public void setscore(int score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
-	
-	public int isRetired() {
+
+	public int getRetired() {
 		return retired;
 	}
 
@@ -162,13 +164,13 @@ public class User {
 	public void setSecurityanswer(String securityanswer) {
 		this.securityanswer = securityanswer;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((aboutMe == null) ? 0 : aboutMe.hashCode());
-		result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
+		result = prime * result + Arrays.hashCode(avatar);
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + retired;
@@ -194,10 +196,7 @@ public class User {
 				return false;
 		} else if (!aboutMe.equals(other.aboutMe))
 			return false;
-		if (avatar == null) {
-			if (other.avatar != null)
-				return false;
-		} else if (!avatar.equals(other.avatar))
+		if (!Arrays.equals(avatar, other.avatar))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -236,14 +235,8 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", aboutMe=" + aboutMe + ", avatar=" + avatar + ", score=" + score + ", retired=" + retired
-				+ ", securityquestion=" + securityquestion + ", securityanswer=" + securityanswer + "]";
+				+ ", aboutMe=" + aboutMe + ", avatar=" + Arrays.toString(avatar) + ", score=" + score + ", retired="
+				+ retired + ", securityquestion=" + securityquestion + ", securityanswer=" + securityanswer + "]";
 	}
-
-	
-
-
-
-	
 
 }
