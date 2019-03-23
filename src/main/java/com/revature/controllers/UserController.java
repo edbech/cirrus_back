@@ -3,8 +3,10 @@ package com.revature.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.User;
 import com.revature.services.UserService;
+import com.revature.util.JwtConfig;
+import com.revature.util.JwtGenerator;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-private UserService service;
+	private UserService service;
 	
 	@Autowired
 	public UserController(UserService userService) {
@@ -33,7 +37,6 @@ private UserService service;
 		return service.getAll();
 	}
 	
-	
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public User getUserById(@PathVariable int id) {
 		return service.getUserById(id);
@@ -41,29 +44,40 @@ private UserService service;
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public User addUser(@RequestBody User user){
+	public ResponseEntity addUser(@RequestBody User user){
 		String username = user.getUsername();
 		String password = user.getPassword();
 		String email = user.getEmail();
 		
-		return service.addUser(username, password, email);
+		User createdUser = service.addUser(username, password, email);
+		HttpHeaders response = new HttpHeaders();
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(createdUser));
+		
+		return new ResponseEntity(createdUser, response, HttpStatus.CREATED);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public User updateUser(@RequestBody User user){
+	public ResponseEntity updateUser(@RequestBody User user){
+		User updatedUser = service.updateUser(user);
 		
-		return service.updateUser(user);
-
+		HttpHeaders response = new HttpHeaders();
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(updatedUser));
+		
+		return new ResponseEntity(updatedUser, response, HttpStatus.CREATED);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value="/auth", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public User authUser(@RequestBody User user){
+	public ResponseEntity authUser(@RequestBody User user){
 		String username = user.getUsername();
 		String password = user.getPassword();
 		
-		return service.getUserByCredentials(username, password);
+		User authUser = service.getUserByCredentials(username, password);
+		HttpHeaders response = new HttpHeaders();
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(authUser));
+		
+		return new ResponseEntity(authUser, response, HttpStatus.CREATED);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
