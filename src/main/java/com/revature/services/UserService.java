@@ -140,8 +140,9 @@ public class UserService {
 		if (oldUser == null)
 			return null;
 		try {
-			oldUser = user;
-			session.merge(oldUser);
+			user.setEmail(oldUser.getEmail());
+			user.setUsername(oldUser.getUsername());
+			session.merge(user);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,7 +150,7 @@ public class UserService {
 			factory.close();
 		}
 
-		return oldUser;
+		return user;
 	}
 
 	// Make this boolean and base it around a successful or unsuccessful user
