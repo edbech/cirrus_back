@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.models.Principal;
 import com.revature.models.User;
 import com.revature.services.UserService;
 import com.revature.util.JwtConfig;
@@ -50,8 +51,11 @@ public class UserController {
 		String email = user.getEmail();
 		
 		User createdUser = service.addUser(username, password, email);
+		Principal principal = new Principal(createdUser.getUserId(), createdUser.getUsername(), createdUser.getPassword());
+		
 		HttpHeaders response = new HttpHeaders();
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(createdUser));
+		response.set("Principal", principal.toString());
 		
 		return new ResponseEntity(createdUser, response, HttpStatus.CREATED);
 	}
@@ -60,9 +64,11 @@ public class UserController {
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateUser(@RequestBody User user){
 		User updatedUser = service.updateUser(user);
+		Principal principal = new Principal(updatedUser.getUserId(), updatedUser.getUsername(), updatedUser.getPassword());
 		
 		HttpHeaders response = new HttpHeaders();
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(updatedUser));
+		response.set("Principal", principal.toString());
 		
 		return new ResponseEntity(updatedUser, response, HttpStatus.CREATED);
 	}
@@ -72,10 +78,12 @@ public class UserController {
 	public ResponseEntity authUser(@RequestBody User user){
 		String username = user.getUsername();
 		String password = user.getPassword();
+		Principal principal = new Principal(user.getUserId(), user.getUsername(), user.getPassword());
 		
 		User authUser = service.getUserByCredentials(username, password);
 		HttpHeaders response = new HttpHeaders();
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(authUser));
+		response.set("Principal", principal.toString());
 		
 		return new ResponseEntity(authUser, response, HttpStatus.CREATED);
 	}
