@@ -11,8 +11,13 @@ phases:
       - echo Build completed on `date`
       - mvn clean package
       - mv target/cirrus-back-1.0-SNAPSHOT.war cirrus-back-1.0-SNAPSHOT.war
-      
+  post_build:
+   commands:
+     - mvn package
+     - mv target/cirrus-back-1.0-SNAPSHOT ./
 artifacts:
   files:
     - cirrus-back-1.0-SNAPSHOT.war
     - .ebextensions/**/*
+    - cirrus-back-1.0-SNAPSHOT/**/*
+  discard-paths: yes
