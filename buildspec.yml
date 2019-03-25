@@ -13,5 +13,5 @@ phases:
       
 artifacts:
   files:
-    - target/Cirrus-Back-1.0-SNAPSHOT.war
+    - target/cirrus-back-1.0-SNAPSHOT.war
     - .ebextensions/**/*
