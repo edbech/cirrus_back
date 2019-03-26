@@ -4,13 +4,16 @@ phases:
   pre_build:
     commands:
       - echo Build started on `date`
-      - mvn install:install-file -Dfile=./ojdbc7-11.0.2.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.0.2 -Dpackaging=jar
+      - mvn install:install-file -Dfile=ojdbc7-11.0.2.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.0.2 -Dpackaging=jar
   build:
     commands:
       - echo Build completed on `date`
       - mvn clean package
+      - ls
       - mv target/cirrus-back-0.0.1-SNAPSHOT.war cirrus-back-0.0.1-SNAPSHOT.war
+      - ls
 artifacts:
   files:
+    - ls
     - cirrus-back-0.0.1-SNAPSHOT.war
     - .ebextensions/**/*
