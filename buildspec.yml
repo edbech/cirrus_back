@@ -4,8 +4,7 @@ phases:
   pre_build:
     commands:
       - echo Build started on `date`
-      - mvn install:install-file -Dfile=ojdbc7-11.0.2.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.0.2 -Dpackaging=jar
-  build:
+      - mvn install:install-file -Dfile=./src/main/resources/ojdbc7-11.0.2.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.0.2 -Dpackaging=jar
     commands:
       - echo Build completed on `date`
       - mvn clean package
