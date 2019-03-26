@@ -29,11 +29,13 @@ public class MessageController {
 		service = messageService;
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Message> getAllMessages(){
 		return service.getAll();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Message getMessageById(@PathVariable int id) {
 		return service.getById(id);

@@ -28,11 +28,13 @@ public class GameController {
 		service = gameService;
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Game> getAllGames(){
 		return service.getAll();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Game getGameById(@PathVariable int id) {
 		return service.getGameById(id);
@@ -48,7 +50,7 @@ public class GameController {
 		return service.createGame(playerX, playerO, isPublic);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public Game updateGame(@RequestBody Game game){
 		

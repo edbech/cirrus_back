@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +61,7 @@ public class UserController {
 		return new ResponseEntity(createdUser, response, HttpStatus.CREATED);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateUser(@RequestBody User user){
 		User updatedUser = service.updateUser(user);
@@ -70,25 +71,26 @@ public class UserController {
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(updatedUser));
 		response.set("Principal", principal.toString());
 		
-		return new ResponseEntity(updatedUser, response, HttpStatus.CREATED);
+		return new ResponseEntity(updatedUser, response, HttpStatus.OK);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value="/auth", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity authUser(@RequestBody User user){
 		String username = user.getUsername();
 		String password = user.getPassword();
-		Principal principal = new Principal(user.getUserId(), user.getUsername(), user.getPassword());
 		
 		User authUser = service.getUserByCredentials(username, password);
+		Principal principal = new Principal(authUser.getUserId(), authUser.getUsername(), authUser.getPassword());
+		
 		HttpHeaders response = new HttpHeaders();
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(authUser));
 		response.set("Principal", principal.toString());
 		
-		return new ResponseEntity(authUser, response, HttpStatus.CREATED);
+		return new ResponseEntity(authUser, response, HttpStatus.OK);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value="/recoveryquestion", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String recoveryQuestion(@RequestBody User user){
 		String username = user.getUsername();
@@ -96,13 +98,22 @@ public class UserController {
 		return service.recoveryQuestion(username);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value="/recoveryanswer", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String recoveryAnswer(@RequestBody User user){
 		String username = user.getUsername();
 		String answer = user.getSecurityanswer();
 		
 		return service.recoverPassword(username, answer);
+	}
+	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping(value="/delete", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public void delete(@RequestBody User user){
+		
+		int userid = user.getUserId();
+		service.deleteUser(userid);
+		
 	}
 	
 }
