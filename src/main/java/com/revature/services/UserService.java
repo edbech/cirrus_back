@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -9,6 +10,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
+import com.revature.models.Game;
+import com.revature.models.Message;
 import com.revature.models.User;
 
 @Service
@@ -18,8 +21,12 @@ public class UserService {
 		super();
 	}
 
+
 	public List<User> getAll() {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -42,9 +49,40 @@ public class UserService {
 		}
 
 	}
+	
+	public List<User> getHighScores() {
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try {
+			session.beginTransaction();
+
+			System.out.println("\nRetrieving all users");
+
+			@SuppressWarnings("unchecked")
+			List<User> users = session.createQuery("SELECT username, score FROM User u WHERE u.score > 0 ORDER BY u.score desc").getResultList();
+			return users;
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+
+		} finally {
+			factory.close();
+		}
+
+	}
 
 	public User getUserById(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -69,7 +107,10 @@ public class UserService {
 	}
 
 	public User getUserByCredentials(String username, String password) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -103,7 +144,10 @@ public class UserService {
 	}
 
 	public String recoveryQuestion(String username) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -127,7 +171,10 @@ public class UserService {
 	}
 
 	public String recoverPassword(String username, String securityAnswer) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -150,9 +197,13 @@ public class UserService {
 			factory.close();
 		}
 	}
+	
 
-	public User addUser(String username, String password, String email) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+	public User addUser(String username, String password, String email, String recovery, String answer) {
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -163,7 +214,7 @@ public class UserService {
 			System.out.println("Creating new user with username: " + username + ", password: " + password
 					+ ", and email: " + email);
 
-			User user = new User(username, password, email);
+			User user = new User(username, password, email, recovery, answer);
 
 			session.save(user);
 			session.getTransaction().commit();
@@ -179,7 +230,10 @@ public class UserService {
 	}
 
 	public User updateUser(User user) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
@@ -211,7 +265,10 @@ public class UserService {
 	// Make this boolean and base it around a successful or unsuccessful user
 	// removal
 	public void deleteUser(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
