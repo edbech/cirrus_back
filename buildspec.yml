@@ -11,6 +11,7 @@ phases:
       - ls
       - mv target/cirrus-back-1.0-SNAPSHOT.war cirrus-back-1.0-SNAPSHOT.war
       - ls
+      - mvn test
 artifacts:
   files:
     - ls
