@@ -1,13 +1,19 @@
 package com.revature.models;
 
 import java.util.Arrays;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -51,15 +57,63 @@ public class User {
 	@Column(name="securityanswer")
 	private String securityanswer;
 	
+	
+//	@OneToMany(mappedBy = "playerX", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+//	private List<Game> playerxGames;
+//	
+//	@OneToMany(mappedBy= "playerO", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+//	private List<Game> playeroGames;
+	
+	
+	
+	
+//	@OneToMany(mappedBy="userid", cascade=CascadeType.ALL)
+//	private List<Message> message;
+	
+
+//	public List<Message> getMessage() {
+//		return message;
+//	}
+//
+//	public void setMessage(List<Message> message) {
+//		this.message = message;
+//	}
+	
+//	 A convenience method for bi-directional relationship between Course and Instructor
+//	public void addMessage(Message message) {
+//		if(message == null) message = new ArrayList<>();
+//		message.add(message);
+//		message.setUser(this);
+//	}
+	
+
+//	public List<Game> getPlayerxGames() {
+//		return playerxGames;
+//	}
+//
+//	public void setPlayerxGames(List<Game> playerxGames) {
+//		this.playerxGames = playerxGames;
+//	}
+//
+//	public List<Game> getPlayeroGames() {
+//		return playeroGames;
+//	}
+//
+//	public void setPlayeroGames(List<Game> playeroGames) {
+//		this.playeroGames = playeroGames;
+//	}
+
 	public User() {
 		super();
 	}
 	
-	public User(String username, String password, String email) {
+	public User(String username, String password, String email, String recovery, String answer) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.securityquestion = recovery;
+		this.securityanswer = answer;
 	}
 
 	public User(int userId, String username, String password, String email) {
@@ -164,7 +218,9 @@ public class User {
 	public void setSecurityanswer(String securityanswer) {
 		this.securityanswer = securityanswer;
 	}
-
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

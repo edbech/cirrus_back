@@ -39,6 +39,11 @@ public class UserController {
 		return service.getAll();
 	}
 	
+	@GetMapping(value ="/scores", produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<User> getHighScores(){
+		return service.getHighScores();
+	}
+	
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public User getUserById(@PathVariable int id) {
 		return service.getUserById(id);
@@ -50,8 +55,10 @@ public class UserController {
 		String username = user.getUsername();
 		String password = user.getPassword();
 		String email = user.getEmail();
+		String recovery  = user.getSecurityquestion();
+		String answer = user.getSecurityanswer();
 		
-		User createdUser = service.addUser(username, password, email);
+		User createdUser = service.addUser(username, password, email, recovery, answer);
 		Principal principal = new Principal(createdUser.getUserId(), createdUser.getUsername(), createdUser.getPassword());
 		
 		HttpHeaders response = new HttpHeaders();
