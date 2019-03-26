@@ -44,7 +44,7 @@ public class FilterController extends HttpFilter {
 		}
 		// 3. Get the token
 		String token = header.replaceAll(JwtConfig.PREFIX, "");
-
+		
 		try {
 
 			// 4. Validate the token
