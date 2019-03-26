@@ -20,15 +20,21 @@ public class MessageService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		Query query = session.createQuery("from Message");
+			Query query = session.createQuery("from Message");
 
-		List<Message> messages = query.getResultList();
+			List<Message> messages = query.getResultList();
+			return messages;
 
-		factory.close();
-		return messages;
-
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
 	}
 
 	public Message getById(int id) {
@@ -36,14 +42,18 @@ public class MessageService {
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
+		try {
+			session.beginTransaction();
 
-		session.beginTransaction();
-
-		Message message = session.get(Message.class, id);
-
-		factory.close();
-		return message;
-
+			Message message = session.get(Message.class, id);
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
 	}
 
 	public Message createMessage(int receiver, int sender, String content) {
@@ -52,15 +62,21 @@ public class MessageService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		Message message = new Message(sender, receiver, content);
+			Message message = new Message(sender, receiver, content);
 
-		session.save(message);
-		session.getTransaction().commit();
-
-		factory.close();
-		return message;
+			session.save(message);
+			session.getTransaction().commit();
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
 
 	}
 
@@ -70,14 +86,20 @@ public class MessageService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		Query query = session.createQuery("delete from Message m where m.id = :id");
-		query.setParameter("id", id);
-		query.executeUpdate();
+			Query query = session.createQuery("delete from Message m where m.id = :id");
+			query.setParameter("id", id);
+			query.executeUpdate();
 
-		session.getTransaction().commit();
-		factory.close();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			factory.close();
+		}
 	}
-	
+
 }

@@ -24,14 +24,23 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		System.out.println("\nRetrieving all users");
+			System.out.println("\nRetrieving all users");
 
-		@SuppressWarnings("unchecked")
-		List<User> users = session.createQuery("from User").getResultList();
-		factory.close();
-		return users;
+			@SuppressWarnings("unchecked")
+			List<User> users = session.createQuery("from User").getResultList();
+			return users;
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+
+		} finally {
+			factory.close();
+		}
+
 	}
 
 	public User getUserById(int id) {
@@ -40,15 +49,23 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		// Retrieve user from DB using PK
-		System.out.println("\nRetrieving user with id: " + id);
+			// Retrieve user from DB using PK
+			System.out.println("\nRetrieving user with id: " + id);
 
-		// session.load lazily fetches, returns a proxy
-		User myUser = session.get(User.class, id);
-		factory.close();
-		return myUser;
+			// session.load lazily fetches, returns a proxy
+			User myUser = session.get(User.class, id);
+			return myUser;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
+
 	}
 
 	public User getUserByCredentials(String username, String password) {
@@ -57,22 +74,32 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		// Retrieve user from DB using PK
-		System.out.println("\nRetrieving user with username: " + username + " and password: " + password);
+			// Retrieve user from DB using PK
+			System.out.println("\nRetrieving user with username: " + username + " and password: " + password);
 
-		// Create the HQL query
-		Query query = session.createQuery("from User u where (u.username = :username) AND (u.password=:password)");
+			// Create the HQL query
+			Query query = session.createQuery("from User u where (u.username = :username) AND (u.password=:password)");
 
-		// Set the parameters for the query inputs, like a prepared statement
-		query.setParameter("username", username);
-		query.setParameter("password", password);
+			// Set the parameters for the query inputs, like a prepared statement
+			query.setParameter("username", username);
+			query.setParameter("password", password);
 
-		// Retrieve the results into a list of users
-		User user = (User) query.getSingleResult();
-		factory.close();
-		return user;
+			// Retrieve the results into a list of users
+			User user = (User) query.getSingleResult();
+			return user;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+
+		} finally {
+			factory.close();
+		}
+
 	}
 
 	public String recoveryQuestion(String username) {
@@ -80,15 +107,23 @@ public class UserService {
 				.buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
-		
-		session.beginTransaction();
-		Query query = session.createQuery("from User u where (u.username = :username)");
-		query.setParameter("username", username);
-		
-		User user = (User) query.getSingleResult();
-		
-		factory.close();
-		return user.getSecurityquestion();
+
+		try {
+			session.beginTransaction();
+			Query query = session.createQuery("from User u where (u.username = :username)");
+			query.setParameter("username", username);
+
+			User user = (User) query.getSingleResult();
+			return user.getSecurityquestion();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
+
 	}
 
 	public String recoverPassword(String username, String securityAnswer) {
@@ -97,16 +132,23 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		Query query = session.createQuery("from User u where (u.username = :username) AND (u.securityanswer = :securityanswer)");
-		query.setParameter("username", username);
-		query.setParameter("securityanswer", securityAnswer);
+			Query query = session
+					.createQuery("from User u where (u.username = :username) AND (u.securityanswer = :securityanswer)");
+			query.setParameter("username", username);
+			query.setParameter("securityanswer", securityAnswer);
 
-		User user = (User) query.getSingleResult();
-		factory.close();
-		
-		return user.getPassword();
+			User user = (User) query.getSingleResult();
+			return user.getPassword();
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction();
+			return null;
+		} finally {
+			factory.close();
+		}
 	}
 
 	public User addUser(String username, String password, String email) {
@@ -115,17 +157,25 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		System.out.println(
-				"Creating new user with username: " + username + ", password: " + password + ", and email: " + email);
+			System.out.println("Creating new user with username: " + username + ", password: " + password
+					+ ", and email: " + email);
 
-		User user = new User(username, password, email);
+			User user = new User(username, password, email);
 
-		session.save(user);
-		session.getTransaction().commit();
-		factory.close();
-		return user;
+			session.save(user);
+			session.getTransaction().commit();
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
+
 	}
 
 	public User updateUser(User user) {
@@ -134,23 +184,28 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
-
-		User oldUser = session.get(User.class, user.getUserId());
-		if (oldUser == null)
-			return null;
 		try {
+
+			session.beginTransaction();
+
+			User oldUser = session.get(User.class, user.getUserId());
+			if (oldUser == null)
+				return null;
+
 			user.setEmail(oldUser.getEmail());
 			user.setUsername(oldUser.getUsername());
 			session.merge(user);
 			session.getTransaction().commit();
+			return user;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+			
 		} finally {
 			factory.close();
 		}
-
-		return user;
 	}
 
 	// Make this boolean and base it around a successful or unsuccessful user
@@ -161,14 +216,20 @@ public class UserService {
 
 		Session session = factory.getCurrentSession();
 
-		session.beginTransaction();
+		try {
+			session.beginTransaction();
 
-		Query query = session.createQuery("delete from User u where u.id = :id");
-		query.setParameter("id", id);
-		query.executeUpdate();
+			Query query = session.createQuery("delete from User u where u.id = :id");
+			query.setParameter("id", id);
+			query.executeUpdate();
 
-		session.getTransaction().commit();
-		factory.close();
+			session.getTransaction().commit();
+		}catch(Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}finally {
+			factory.close();
+		}
 	}
 
 }
