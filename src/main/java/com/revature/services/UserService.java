@@ -176,7 +176,7 @@ public class UserService {
 
 	}
 
-	public String recoveryQuestion(String username) {
+	public User recoveryQuestion(User recoverQuestion) {
 		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(Game.class)
@@ -187,11 +187,16 @@ public class UserService {
 
 		try {
 			session.beginTransaction();
+			String username = recoverQuestion.getUsername();
 			Query query = session.createQuery("from User u where (u.username = :username)");
 			query.setParameter("username", username);
 
-			User user = (User) query.getSingleResult();
-			return user.getSecurityquestion();
+			User temp = (User) query.getSingleResult();
+			User user = new User();
+			user.setUsername(temp.getUsername());
+			user.setUserId(temp.getUserId());
+			user.setSecurityquestion(temp.getSecurityquestion());
+			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,7 +208,7 @@ public class UserService {
 
 	}
 
-	public String recoverPassword(String username, String securityAnswer) {
+	public User recoverPassword(User recoverAnswer) {
 		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(User.class)
 				.addAnnotatedClass(Game.class)
@@ -215,13 +220,23 @@ public class UserService {
 		try {
 			session.beginTransaction();
 
+			String username = recoverAnswer.getUsername();
+			String securityAnswer = recoverAnswer.getSecurityanswer();
+			
 			Query query = session
 					.createQuery("from User u where (u.username = :username) AND (u.securityanswer = :securityanswer)");
 			query.setParameter("username", username);
 			query.setParameter("securityanswer", securityAnswer);
 
-			User user = (User) query.getSingleResult();
-			return user.getPassword();
+			User temp = (User) query.getSingleResult();
+			User user = new User();
+			user.setUserId(temp.getUserId());
+			user.setSecurityquestion(temp.getSecurityquestion());
+			user.setSecurityanswer(temp.getSecurityanswer());
+			user.setPassword(temp.getPassword());
+			user.setUsername(temp.getUsername());
+			
+			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction();

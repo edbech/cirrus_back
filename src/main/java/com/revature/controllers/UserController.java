@@ -103,19 +103,14 @@ public class UserController {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value="/recoveryquestion", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public String recoveryQuestion(@RequestBody User user){
-		String username = user.getUsername();
-		
-		return service.recoveryQuestion(username);
+	public User recoveryQuestion(@RequestBody User user){
+		return service.recoveryQuestion(user);
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value="/recoveryanswer", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public String recoveryAnswer(@RequestBody User user){
-		String username = user.getUsername();
-		String answer = user.getSecurityanswer();
-		
-		return service.recoverPassword(username, answer);
+	public User recoveryAnswer(@RequestBody User user){
+		return service.recoverPassword(user);
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
