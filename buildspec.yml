@@ -12,5 +12,5 @@ phases:
       - mvn clean package
 artifacts:
   files:
-    - Cirrus-Back-1.0-SNAPSHOT.war
+    - target/Cirrus-Back-1.0-SNAPSHOT.war
     - .ebextensions/**/*
