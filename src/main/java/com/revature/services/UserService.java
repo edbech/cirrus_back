@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.revature.models.Game;
 import com.revature.models.Message;
 import com.revature.models.User;
+import com.revature.util.HibernateUtil;
 
 @Service
 public class UserService {
@@ -22,13 +23,7 @@ public class UserService {
 
 
 	public List<User> getAll() {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -37,26 +32,19 @@ public class UserService {
 
 			@SuppressWarnings("unchecked")
 			List<User> users = session.createQuery("from User").getResultList();
+			HibernateUtil.getSessionFactory().close();
 			return users;
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 	
 	public List<User> getHighScores() {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -69,22 +57,15 @@ public class UserService {
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
+			HibernateUtil.getSessionFactory().close();
 			return null;
 
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public User getUserById(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -94,25 +75,19 @@ public class UserService {
 
 			// session.load lazily fetches, returns a proxy
 			User myUser = session.get(User.class, id);
+			HibernateUtil.getSessionFactory().close();
 			return myUser;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 	
 	public User getIdByUsername(String username) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -127,26 +102,19 @@ public class UserService {
 			User user = new User();
 			user.setUserId(temp.getUserId());
 			user.setUsername(temp.getUsername());
-			
+			HibernateUtil.getSessionFactory().close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public User getUserByCredentials(String username, String password) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -163,27 +131,21 @@ public class UserService {
 
 			// Retrieve the results into a list of users
 			User user = (User) query.getSingleResult();
+			HibernateUtil.getSessionFactory().close();
 			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
 
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public User recoveryQuestion(User recoverQuestion) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -196,26 +158,20 @@ public class UserService {
 			user.setUsername(temp.getUsername());
 			user.setUserId(temp.getUserId());
 			user.setSecurityquestion(temp.getSecurityquestion());
+			HibernateUtil.getSessionFactory().close();
 			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public User recoverPassword(User recoverAnswer) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -236,25 +192,19 @@ public class UserService {
 			user.setPassword(temp.getPassword());
 			user.setUsername(temp.getUsername());
 			
+			HibernateUtil.getSessionFactory().close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 	}
 	
 
 	public User addUser(String username, String password, String email, String recovery, String answer) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -266,25 +216,19 @@ public class UserService {
 
 			session.save(user);
 			session.getTransaction().commit();
+			HibernateUtil.getSessionFactory().close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public User updateUser(User user) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 
@@ -298,28 +242,22 @@ public class UserService {
 			user.setUsername(oldUser.getUsername());
 			session.merge(user);
 			session.getTransaction().commit();
+			HibernateUtil.getSessionFactory().close();
 			return user;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
 			
-		} finally {
-			factory.close();
-		}
+		} 
 	}
 
 	// Make this boolean and base it around a successful or unsuccessful user
 	// removal
 	public void deleteUser(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(User.class)
-				.addAnnotatedClass(Game.class)
-				.addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -332,8 +270,6 @@ public class UserService {
 		}catch(Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-		}finally {
-			factory.close();
 		}
 	}
 
