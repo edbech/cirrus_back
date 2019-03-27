@@ -5,7 +5,6 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn install:install-file -Dfile=ojdbc7-11.2.0.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.2.0 -Dpackaging=jar
-      - mvn test
   build:
     commands:
       - echo Build completed on `date`
