@@ -10,15 +10,13 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Message;
+import com.revature.util.HibernateUtil;
 
 @Service
 public class MessageService {
 
 	public List<Message> getAll() {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -26,41 +24,35 @@ public class MessageService {
 			Query query = session.createQuery("from Message");
 
 			List<Message> messages = query.getResultList();
+			HibernateUtil.getSessionFactory().close();
 			return messages;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
 		}
 	}
 
 	public Message getById(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			session.beginTransaction();
 
 			Message message = session.get(Message.class, id);
+			HibernateUtil.getSessionFactory().close();
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 	}
 
 	public Message createMessage(int receiver, int sender, String content) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -69,22 +61,19 @@ public class MessageService {
 
 			session.save(message);
 			session.getTransaction().commit();
+			HibernateUtil.getSessionFactory().close();
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+			HibernateUtil.getSessionFactory().close();
 			return null;
-		} finally {
-			factory.close();
-		}
+		} 
 
 	}
 
 	public void deleteMessage(int id) {
-		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Message.class)
-				.buildSessionFactory();
-
-		Session session = factory.getCurrentSession();
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		try {
 			session.beginTransaction();
@@ -98,7 +87,7 @@ public class MessageService {
 			e.printStackTrace();
 			session.getTransaction().rollback();
 		} finally {
-			factory.close();
+			HibernateUtil.getSessionFactory().close();
 		}
 	}
 

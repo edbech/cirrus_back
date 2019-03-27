@@ -13,8 +13,6 @@ public class UserServiceDriver {
 		List<User> newUser = new ArrayList<>();
 		
 		
-		System.out.println(userServe.recoverPassword("Billiam", "Red"));
-		
 		
 	}
 	
