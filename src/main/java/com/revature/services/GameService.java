@@ -74,7 +74,7 @@ public class GameService {
 
 	}
 
-	public Game createGame(int playerX, int playerO, int isPublic) {
+	public Game createGame(String playerX, String playerO, int isPublic) {
 		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Game.class)
 				.buildSessionFactory();
 

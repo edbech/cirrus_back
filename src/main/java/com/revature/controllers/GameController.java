@@ -43,9 +43,9 @@ public class GameController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public Game addGame(@RequestBody Game game){
-		int playerX = game.getPlayerX();
-		int playerO = game.getPlayerO();
-		int isPublic = game.isPublic();
+		String playerX = game.getPlayerX();
+		String playerO = game.getPlayerO();
+		int isPublic = game.getIsPublic();
 		
 		return service.createGame(playerX, playerO, isPublic);
 	}

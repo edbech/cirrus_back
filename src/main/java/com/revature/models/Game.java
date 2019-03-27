@@ -21,10 +21,10 @@ public class Game {
 	private int gameId;
 	
 	@Column(name="playerx")
-	private int playerX;
+	private String playerX;
 	
 	@Column(name="playero")
-	private int playerO;
+	private String playerO;
 	
 	@Column(name="gamestate")
 	private String gamestate;
@@ -45,24 +45,20 @@ public class Game {
 		super();
 	}
 
-	public Game(int playerX, int playerO, int isPublic) {
+	public Game(String playerX, int isPublic) {
+		super();
+		this.playerX = playerX;
+		this.isPublic = isPublic;
+	}
+
+	public Game(String playerX, String playerO, int isPublic) {
 		super();
 		this.playerX = playerX;
 		this.playerO = playerO;
 		this.isPublic = isPublic;
 	}
 
-	public Game(int gameId, int playerX, int playerO, String gamestate, Timestamp started, int isPublic) {
-		super();
-		this.gameId = gameId;
-		this.playerX = playerX;
-		this.playerO = playerO;
-		this.gamestate = gamestate;
-		this.started = started;
-		this.isPublic = isPublic;
-	}
-
-	public Game(int gameId, int playerX, int playerO, String gamestate, String result, Timestamp started,
+	public Game(int gameId, String playerX, String playerO, String gamestate, String result, Timestamp started,
 			Timestamp finished, int isPublic) {
 		super();
 		this.gameId = gameId;
@@ -83,19 +79,19 @@ public class Game {
 		this.gameId = gameId;
 	}
 
-	public int getPlayerX() {
+	public String getPlayerX() {
 		return playerX;
 	}
 
-	public void setPlayerX(int playerX) {
+	public void setPlayerX(String playerX) {
 		this.playerX = playerX;
 	}
 
-	public int getPlayerO() {
+	public String getPlayerO() {
 		return playerO;
 	}
 
-	public void setPlayerO(int playerO) {
+	public void setPlayerO(String playerO) {
 		this.playerO = playerO;
 	}
 
@@ -131,14 +127,6 @@ public class Game {
 		this.finished = finished;
 	}
 
-	public int isPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(int isPublic) {
-		this.isPublic = isPublic;
-	}
-
 	public int getIsPublic() {
 		return isPublic;
 	}
@@ -155,8 +143,8 @@ public class Game {
 		result = prime * result + gameId;
 		result = prime * result + ((gamestate == null) ? 0 : gamestate.hashCode());
 		result = prime * result + isPublic;
-		result = prime * result + playerO;
-		result = prime * result + playerX;
+		result = prime * result + ((playerO == null) ? 0 : playerO.hashCode());
+		result = prime * result + ((playerX == null) ? 0 : playerX.hashCode());
 		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
 		result = prime * result + ((started == null) ? 0 : started.hashCode());
 		return result;
@@ -185,9 +173,15 @@ public class Game {
 			return false;
 		if (isPublic != other.isPublic)
 			return false;
-		if (playerO != other.playerO)
+		if (playerO == null) {
+			if (other.playerO != null)
+				return false;
+		} else if (!playerO.equals(other.playerO))
 			return false;
-		if (playerX != other.playerX)
+		if (playerX == null) {
+			if (other.playerX != null)
+				return false;
+		} else if (!playerX.equals(other.playerX))
 			return false;
 		if (result == null) {
 			if (other.result != null)
@@ -208,5 +202,5 @@ public class Game {
 				+ ", result=" + result + ", started=" + started + ", finished=" + finished + ", isPublic=" + isPublic
 				+ "]";
 	}
-	
+
 }
