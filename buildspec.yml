@@ -10,7 +10,11 @@ phases:
     commands:
       - echo Build completed on `date`
       - mvn clean package
+      - ls
+      - mv target/Cirrus-Back-1.0-SNAPSHOT.war Cirrus-Back-1.0-SNAPSHOT.war 
+      - ls
 artifacts:
   files:
-    - target/Cirrus-Back-1.0-SNAPSHOT.war
+    - ls
+    - Cirrus-Back-1.0-SNAPSHOT.war
     - .ebextensions/**/*
