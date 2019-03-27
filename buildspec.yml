@@ -5,10 +5,12 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn install:install-file -Dfile=ojdbc7-11.2.0.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=11.2.0 -Dpackaging=jar
+      - mvn clean package
   build:
     commands:
       - echo Build completed on `date`
-      - mvn clean package 
+      - mvn clean package
+      - mv target/Cirrus-Back-1.0-SNAPSHOT.war Cirrus-Back-1.0-SNAPSHOT.war
 artifacts:
   files:
       - target/Cirrus-Back-1.0-SNAPSHOT.war
