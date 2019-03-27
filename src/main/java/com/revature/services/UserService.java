@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -96,6 +95,40 @@ public class UserService {
 			// session.load lazily fetches, returns a proxy
 			User myUser = session.get(User.class, id);
 			return myUser;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return null;
+		} finally {
+			factory.close();
+		}
+
+	}
+	
+	public User getIdByUsername(String username) {
+		SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Game.class)
+				.addAnnotatedClass(Message.class)
+				.buildSessionFactory();
+
+		Session session = factory.getCurrentSession();
+
+		try {
+			session.beginTransaction();
+
+			// Retrieve user from DB using PK
+			System.out.println("\nRetrieving userId from user: " + username);
+
+			Query query = session.createQuery("from User u where (u.username = :username)");
+			query.setParameter("username", username);
+			
+			User temp = (User) query.getSingleResult();
+			User user = new User();
+			user.setUserId(temp.getUserId());
+			user.setUsername(temp.getUsername());
+			
+			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
