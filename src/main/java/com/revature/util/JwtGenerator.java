@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-import com.revature.models.User;
+import com.revature.models.Principal;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -24,7 +24,7 @@ public class JwtGenerator {
 	 * @param subject
 	 * @return	a web token for the user with their detail object provided as parameter.
 	 */
-	public static String createJwt(User subject) {
+	public static String createJwt(Principal subject) {
 		log.info("Creating new JWT for: " + subject.getUsername());
 		
 		// The JWT Signature Algorithm used to sign the token
@@ -34,7 +34,7 @@ public class JwtGenerator {
 		
 		// Configure the JWT and set its claims
 		JwtBuilder builder = Jwts.builder()
-				.setId(Integer.toString(subject.getUserId()))
+				.setId(Integer.toString(subject.getId()))
 				.setSubject(subject.getUsername())
 				.setIssuer("project2")
 				.claim("password", subject.getPassword())

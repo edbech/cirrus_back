@@ -49,6 +49,12 @@ public class UserController {
 		return service.getUserById(id);
 	}
 	
+	@PostMapping(value="/id", produces=MediaType.APPLICATION_JSON_VALUE)
+	public User getIdByUsername(@RequestBody User user) {
+		String username = user.getUsername();
+		return service.getIdByUsername(username);
+	}
+	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity addUser(@RequestBody User user){
