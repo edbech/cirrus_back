@@ -1,8 +1,10 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Query;
 
@@ -76,9 +78,18 @@ public class GameService {
 			session.beginTransaction();
 
 			System.out.println("\nCreating new game");
-
-			Game game = new Game(playerX, playerO, isPublic);
-
+			Game game;
+			Random rand = new Random();
+			if(rand.nextBoolean()) {
+				game = new Game(playerX, playerO, isPublic);
+			} else {
+				game = new Game(playerO, playerX, isPublic);
+			}
+			game.setGamestate("000000000");
+			if(game.getPlayerX().equals("IAmABot")) {
+				game.setGamestate(GameService.aiMove(game.getGamestate()));
+			}
+			game.setResult("INPROGRESS");
 			session.save(game);
 			session.getTransaction().commit();
 			session.close();
@@ -120,10 +131,31 @@ public class GameService {
 			session.beginTransaction();
 			Game oldGame = session.get(Game.class, game.getGameId());
 
-			if (oldGame == null)
+			if (oldGame == null) {
+				oldGame = game;
 				return null;
-			oldGame = game;
-
+			}
+			oldGame.setGamestate(game.getGamestate());
+			if(oldGame.getPlayerO().equals("IAmABot") || oldGame.getPlayerX().equals("IAmABot")) {
+				oldGame.setGamestate(GameService.aiMove(oldGame.getGamestate()));
+			}
+			int result = GameService.getResult(oldGame.getGamestate());
+			switch(result) {
+				case 0:
+					break;
+				case 1:
+					oldGame.setResult(oldGame.getPlayerX());
+					break;
+				case 2:
+					oldGame.setResult(oldGame.getPlayerO());
+					break;
+				case 3:
+					oldGame.setResult("DRAW");
+					break;
+				case 4:
+					oldGame.setResult("INVALID");
+					break;
+			}
 			session.merge(oldGame);
 			session.getTransaction().commit();
 			session.close();
@@ -157,7 +189,7 @@ public class GameService {
 		}
 	}
 
-	private String aiMove(String gameState) {
+	private static String aiMove(String gameState) {
 		String[] strs = gameState.split("");
 
 		Integer[] state = new Integer[strs.length];
@@ -165,14 +197,16 @@ public class GameService {
 			state[i] = Integer.parseInt(strs[i]);
 		}
 		int max = Collections.max(Arrays.asList(state));
-		int j = 0;
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < state.length; i++) {
 			if (state[i] == 0) {
-				state[i] = max + 1;
-				break;
+				list.add(i);
 			}
 		}
-
+		if(list.size() > 0) {
+		Collections.shuffle(list, new Random());
+		state[list.get(0)] = max +1;
+		}
 		for (int i = 0; i < state.length; i++) {
 			strs[i] = String.valueOf(state[i]);
 		}
@@ -181,7 +215,7 @@ public class GameService {
 
 	}
 
-	private int getResult(String gameState) { // returns 0 for in progress, 1 for player x win, 2 for player o win, 3
+	private static int getResult(String gameState) { // returns 0 for in progress, 1 for player x win, 2 for player o win, 3
 												// for draw, 4 for invalid game
 		String[] strs = gameState.split("");
 
@@ -225,22 +259,19 @@ public class GameService {
 		if (getTriadResult(state[2], state[4], state[6])) {
 			count++;
 		}
-
-		switch (count) {
-		case 0:
-			return 0;
-		case 1:
-			if (max % 2 == 0) {
-				return 2;
-			} else {
-				return 1;
+		if(count == 0) {
+			if (max == 9) {
+				return 3;
 			}
-		default:
-			return 4;
+			return 0;
+		}else if (max % 2 == 0) {
+			return 2;
+		} else {
+			return 1;
 		}
 	}
 
-	private boolean getTriadResult(int a, int b, int c) {// true if victorious, false if not
+	private static boolean getTriadResult(int a, int b, int c) {// true if victorious, false if not
 		if (a == 0 || b == 0 || c == 0) {
 			return false;
 		}
