@@ -32,7 +32,7 @@ public class JwtGenerator {
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 		
 		long nowMillis = System.currentTimeMillis();
-		
+		System.out.println(subject);
 		// Configure the JWT and set its claims
 		JwtBuilder builder = Jwts.builder()
 				.setId(Integer.toString(subject.getUserId()))

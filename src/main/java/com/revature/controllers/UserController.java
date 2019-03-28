@@ -94,7 +94,7 @@ public class UserController {
 		
 		User authUser = service.getUserByCredentials(username, password);
 		Principal principal = new Principal(authUser.getUserId(), authUser.getUsername(), authUser.getPassword());
-		
+		System.out.println(authUser);
 		HttpHeaders response = new HttpHeaders();
 		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(authUser));
 		

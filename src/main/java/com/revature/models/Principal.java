@@ -2,7 +2,7 @@ package com.revature.models;
 
 public class Principal {
 
-	private int id;
+	private int userId;
 	private String username;
 	private String password;
 	
@@ -16,19 +16,19 @@ public class Principal {
 		this.password = password;
 	}
 
-	public Principal(int id, String username, String password) {
+	public Principal(int userId, String username, String password) {
 		super();
-		this.id = id;
+		this.userId = userId;
 		this.username = username;
 		this.password = password;
 	}
 
-	public int getId() {
-		return id;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -51,8 +51,8 @@ public class Principal {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + userId;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -66,12 +66,12 @@ public class Principal {
 		if (getClass() != obj.getClass())
 			return false;
 		Principal other = (Principal) obj;
-		if (id != other.id)
-			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
+			return false;
+		if (userId != other.userId)
 			return false;
 		if (username == null) {
 			if (other.username != null)
@@ -83,10 +83,7 @@ public class Principal {
 
 	@Override
 	public String toString() {
-		return "Principal [id=" + id + ", username=" + username + ", password=" + password + "]";
+		return "Principal [userId=" + userId + ", username=" + username + ", password=" + password + "]";
 	}
-	
-	
-	
 	
 }

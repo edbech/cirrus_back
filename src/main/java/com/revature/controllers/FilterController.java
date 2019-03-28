@@ -22,7 +22,7 @@ import io.jsonwebtoken.Jwts;
 public class FilterController extends HttpFilter {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(Filter.class);
+	private static Logger log = Logger.getLogger(FilterController.class);
 
 	@Override
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
@@ -31,11 +31,12 @@ public class FilterController extends HttpFilter {
 
 		// 1. Get the HTTP header named "Authorization"
 		String header = req.getHeader(JwtConfig.HEADER);
+		System.out.println(header);
 
 		// 2. Validate the header values and check the prefix
 		if (header == null || !header.startsWith(JwtConfig.PREFIX)) {
 			log.info("Request originates from an unauthenticated origin");
-
+			System.out.println("inside null");
 			// 2.1: If there is no header, or one that we provided, then go to the next step
 			// in the filter chain (target servlet)
 			chain.doFilter(req, resp);
@@ -55,7 +56,7 @@ public class FilterController extends HttpFilter {
 
 			// 5. Obtain the principal/subject stored in the JWT
 			Principal principal = new Principal();
-			principal.setId(Integer.parseInt(claims.getId()));
+			principal.setUserId(Integer.parseInt(claims.getId()));
 			principal.setUsername(claims.getSubject());
 			principal.setPassword(claims.get("password", String.class));
 
