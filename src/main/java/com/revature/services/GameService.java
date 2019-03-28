@@ -86,7 +86,7 @@ public class GameService {
 				game = new Game(playerO, playerX, isPublic);
 			}
 			game.setGamestate("000000000");
-			if(game.getPlayerX() == "IAmABot") {
+			if(game.getPlayerX().equals("IAmABot")) {
 				game.setGamestate(GameService.aiMove(game.getGamestate()));
 			}
 			game.setResult("INPROGRESS");
@@ -136,7 +136,7 @@ public class GameService {
 				return null;
 			}
 			oldGame.setGamestate(game.getGamestate());
-			if(oldGame.getPlayerO() == "IAmABot"||oldGame.getPlayerX() == "IAmABot") {
+			if(oldGame.getPlayerO().equals("IAmABot") || oldGame.getPlayerX().equals("IAmABot")) {
 				oldGame.setGamestate(GameService.aiMove(oldGame.getGamestate()));
 			}
 			int result = GameService.getResult(oldGame.getGamestate());
