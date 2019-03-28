@@ -32,10 +32,13 @@ public class FilterController extends HttpFilter {
 
 		// 1. Get the HTTP header named "Authorization"
 		String header = req.getHeader(JwtConfig.HEADER);
+		System.out.println("here");
+		System.out.println(header);
 
 		// 2. Validate the header values and check the prefix
 		if (header == null || !header.startsWith(JwtConfig.PREFIX)) {
 			log.info("Request originates from an unauthenticated origin");
+			System.out.println("here1");
 
 			// 2.1: If there is no header, or one that we provided, then go to the next step
 			// in the filter chain (target servlet)
@@ -45,10 +48,14 @@ public class FilterController extends HttpFilter {
 		// 3. Get the token
 		String token = header.replaceAll(JwtConfig.PREFIX, "");
 		
+		
 		try {
 
 			// 4. Validate the token
-			Claims claims = Jwts.parser().setSigningKey(JwtConfig.signingKey).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parser()
+					.setSigningKey(JwtConfig.signingKey)
+					.parseClaimsJws(token)
+					.getBody();
 
 			// 5. Obtain the principal/subject stored in the JWT
 			Principal principal = new Principal();

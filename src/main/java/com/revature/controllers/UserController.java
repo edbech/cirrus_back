@@ -68,7 +68,7 @@ public class UserController {
 		Principal principal = new Principal(createdUser.getUserId(), createdUser.getUsername(), createdUser.getPassword());
 		
 		HttpHeaders response = new HttpHeaders();
-		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(principal));
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(createdUser));
 		response.set("Principal", principal.toString());
 		
 		return new ResponseEntity(createdUser, response, HttpStatus.CREATED);
@@ -81,7 +81,7 @@ public class UserController {
 		Principal principal = new Principal(updatedUser.getUserId(), updatedUser.getUsername(), updatedUser.getPassword());
 		
 		HttpHeaders response = new HttpHeaders();
-		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(principal));
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(updatedUser));
 		
 		return new ResponseEntity(updatedUser, response, HttpStatus.OK);
 	}
@@ -96,7 +96,7 @@ public class UserController {
 		Principal principal = new Principal(authUser.getUserId(), authUser.getUsername(), authUser.getPassword());
 		
 		HttpHeaders response = new HttpHeaders();
-		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(principal));
+		response.set(JwtConfig.HEADER, JwtConfig.PREFIX + JwtGenerator.createJwt(authUser));
 		
 		return new ResponseEntity(principal, response, HttpStatus.OK);
 	}
