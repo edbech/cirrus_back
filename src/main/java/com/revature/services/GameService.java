@@ -120,10 +120,11 @@ public class GameService {
 			session.beginTransaction();
 			Game oldGame = session.get(Game.class, game.getGameId());
 
-			if (oldGame == null)
+			if (oldGame == null) {
+				oldGame = game;
 				return null;
-			oldGame = game;
-
+			}
+			oldGame.setGamestate(game.getGamestate());
 			session.merge(oldGame);
 			session.getTransaction().commit();
 			session.close();
