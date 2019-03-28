@@ -5,12 +5,8 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
-import com.revature.models.Game;
-import com.revature.models.Message;
 import com.revature.models.User;
 import com.revature.util.HibernateUtil;
 
@@ -32,12 +28,12 @@ public class UserService {
 
 			@SuppressWarnings("unchecked")
 			List<User> users = session.createQuery("from User").getResultList();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return users;
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -53,11 +49,12 @@ public class UserService {
 
 			@SuppressWarnings("unchecked")
 			List<User> users = session.createQuery("SELECT username, score FROM User u WHERE u.score > 0 ORDER BY u.score desc").getResultList();
+			session.close();
 			return users;
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			e.printStackTrace();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 
 		} 
@@ -75,12 +72,12 @@ public class UserService {
 
 			// session.load lazily fetches, returns a proxy
 			User myUser = session.get(User.class, id);
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return myUser;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -102,12 +99,12 @@ public class UserService {
 			User user = new User();
 			user.setUserId(temp.getUserId());
 			user.setUsername(temp.getUsername());
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -131,13 +128,13 @@ public class UserService {
 
 			// Retrieve the results into a list of users
 			User user = (User) query.getSingleResult();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 
 		} 
@@ -158,13 +155,13 @@ public class UserService {
 			user.setUsername(temp.getUsername());
 			user.setUserId(temp.getUserId());
 			user.setSecurityquestion(temp.getSecurityquestion());
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -192,12 +189,12 @@ public class UserService {
 			user.setPassword(temp.getPassword());
 			user.setUsername(temp.getUsername());
 			
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 	}
@@ -216,12 +213,12 @@ public class UserService {
 
 			session.save(user);
 			session.getTransaction().commit();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -242,13 +239,13 @@ public class UserService {
 			user.setUsername(oldUser.getUsername());
 			session.merge(user);
 			session.getTransaction().commit();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return user;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 			
 		} 
@@ -270,6 +267,8 @@ public class UserService {
 		}catch(Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
+		}finally {
+			session.close();
 		}
 	}
 

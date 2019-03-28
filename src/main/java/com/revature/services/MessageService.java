@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Message;
@@ -24,13 +22,13 @@ public class MessageService {
 			Query query = session.createQuery("from Message");
 
 			List<Message> messages = query.getResultList();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return messages;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		}
 	}
@@ -41,12 +39,12 @@ public class MessageService {
 			session.beginTransaction();
 
 			Message message = session.get(Message.class, id);
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 	}
@@ -61,12 +59,12 @@ public class MessageService {
 
 			session.save(message);
 			session.getTransaction().commit();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -87,7 +85,7 @@ public class MessageService {
 			e.printStackTrace();
 			session.getTransaction().rollback();
 		} finally {
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 		}
 	}
 

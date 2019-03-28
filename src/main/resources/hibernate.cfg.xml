@@ -16,6 +16,8 @@
 
 		<!-- JDBC connection pool setting -->
 		<property name="connection.pool_size">20</property>
+		<property name="hibernate.c3p0.timeout">60</property>
+		<property name="hibernate.c3p0.min_size">0</property>
 
 		<!-- Select our SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>

@@ -81,6 +81,12 @@
 			<artifactId>ojdbc7</artifactId>
 			<version>11.2.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>5.3.6.Final</version>
+		</dependency>
 
 		<dependency>
 			<groupId>log4j</groupId>

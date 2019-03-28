@@ -7,12 +7,9 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Game;
-import com.revature.models.User;
 import com.revature.util.HibernateUtil;
 
 @Service
@@ -60,13 +57,13 @@ public class GameService {
 			System.out.println("\nRetrieving all games");
 
 			List<Game> games = session.createQuery("from Game").getResultList();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return games;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -84,13 +81,13 @@ public class GameService {
 
 			session.save(game);
 			session.getTransaction().commit();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return game;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -105,12 +102,12 @@ public class GameService {
 			System.out.println("\nRetrieving game with id: " + id);
 
 			Game game = session.get(Game.class, id);
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return game;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -129,12 +126,12 @@ public class GameService {
 
 			session.merge(oldGame);
 			session.getTransaction().commit();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return oldGame;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			HibernateUtil.getSessionFactory().close();
+			session.close();
 			return null;
 		} 
 
@@ -155,7 +152,9 @@ public class GameService {
 		}catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-		} 
+		} finally {
+			session.close();
+		}
 	}
 
 	private String aiMove(String gameState) {
