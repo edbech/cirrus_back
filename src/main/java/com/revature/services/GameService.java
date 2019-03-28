@@ -144,10 +144,10 @@ public class GameService {
 				case 0:
 					break;
 				case 1:
-					oldGame.setResult(game.getPlayerX());
+					oldGame.setResult(oldGame.getPlayerX());
 					break;
 				case 2:
-					oldGame.setResult(game.getPlayerO());
+					oldGame.setResult(oldGame.getPlayerO());
 					break;
 				case 3:
 					oldGame.setResult("DRAW");
@@ -229,9 +229,6 @@ public class GameService {
 		if (max == 0) {
 			return 0;
 		}
-		if (max == 9) {
-			return 3;
-		}
 
 		// rows
 		if (getTriadResult(state[0], state[1], state[2])) {
@@ -263,6 +260,9 @@ public class GameService {
 			count++;
 		}
 		if(count == 0) {
+			if (max == 9) {
+				return 3;
+			}
 			return 0;
 		}else if (max % 2 == 0) {
 			return 2;
