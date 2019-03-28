@@ -56,7 +56,7 @@ public class FilterController extends HttpFilter {
 
 			// 5. Obtain the principal/subject stored in the JWT
 			Principal principal = new Principal();
-			principal.setId(Integer.parseInt(claims.getId()));
+			principal.setUserId(Integer.parseInt(claims.getId()));
 			principal.setUsername(claims.getSubject());
 			principal.setPassword(claims.get("password", String.class));
 
