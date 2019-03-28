@@ -229,9 +229,6 @@ public class GameService {
 		if (max == 0) {
 			return 0;
 		}
-		if (max == 9) {
-			return 3;
-		}
 
 		// rows
 		if (getTriadResult(state[0], state[1], state[2])) {
@@ -263,6 +260,9 @@ public class GameService {
 			count++;
 		}
 		if(count == 0) {
+			if (max == 9) {
+				return 3;
+			}
 			return 0;
 		}else if (max % 2 == 0) {
 			return 2;
