@@ -20,7 +20,7 @@ public class JwtConfig {
 	public static final int EXPIRATION = 24 * 60 * 60;
 
 	// FIGURE OUT WHAT SECRET IS
-	public static final String SECRET = "Cirrus";
+	public static final String SECRET = "Ankit&Tracy";
 	public static final Key signingKey;
 
 	static {
