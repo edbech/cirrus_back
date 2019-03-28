@@ -13,9 +13,9 @@ phases:
       - ls
       - cd target
       - ls
-      - mv target/cirrus-Back-1.0-SNAPSHOT.war cirrus-Back-1.0-SNAPSHOT.war 
+      - mv target/cirrus-back-1.0-SNAPSHOT.war cirrus-back-1.0-SNAPSHOT.war 
       - ls
 artifacts:
   files:
-    - cirrus-Back-1.0-SNAPSHOT.war
+    - cirrus-back-1.0-SNAPSHOT.war
     - .ebextensions/**/*
