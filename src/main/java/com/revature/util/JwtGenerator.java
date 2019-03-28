@@ -42,7 +42,7 @@ public class JwtGenerator {
 				.setExpiration(new Date(nowMillis + JwtConfig.EXPIRATION * 1000))
 				.signWith(signatureAlgorithm, JwtConfig.signingKey);
 		
-		log.info("JWT successfully created");
+		
 		
 		// Build the JWT and serialize it into a compact, URL-safe string
 		return builder.compact();

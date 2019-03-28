@@ -27,18 +27,14 @@ public class FilterController extends HttpFilter {
 	@Override
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		log.info("Inside of JwtAuthFilter.doFilter()");
 		setAccessControlHeaders(resp);
 
 		// 1. Get the HTTP header named "Authorization"
 		String header = req.getHeader(JwtConfig.HEADER);
-		System.out.println("here");
-		System.out.println(header);
 
 		// 2. Validate the header values and check the prefix
 		if (header == null || !header.startsWith(JwtConfig.PREFIX)) {
 			log.info("Request originates from an unauthenticated origin");
-			System.out.println("here1");
 
 			// 2.1: If there is no header, or one that we provided, then go to the next step
 			// in the filter chain (target servlet)
@@ -66,7 +62,6 @@ public class FilterController extends HttpFilter {
 			// 6. Attach an attribute to the request indicating information about the
 			// principal
 			req.setAttribute("principal", principal);
-			System.out.println(principal);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,7 +73,6 @@ public class FilterController extends HttpFilter {
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse resp) {
-		log.info("Attaching CORS headers to HTTP response");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
 		resp.setHeader("Access-Control-Allow-Headers", "Content-type, Authorization");
