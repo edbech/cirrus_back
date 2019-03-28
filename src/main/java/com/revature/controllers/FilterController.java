@@ -27,7 +27,6 @@ public class FilterController extends HttpFilter {
 	@Override
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		log.info("Inside of JwtAuthFilter.doFilter()");
 		setAccessControlHeaders(resp);
 
 		// 1. Get the HTTP header named "Authorization"
@@ -45,10 +44,14 @@ public class FilterController extends HttpFilter {
 		// 3. Get the token
 		String token = header.replaceAll(JwtConfig.PREFIX, "");
 		
+		
 		try {
 
 			// 4. Validate the token
-			Claims claims = Jwts.parser().setSigningKey(JwtConfig.signingKey).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parser()
+					.setSigningKey(JwtConfig.signingKey)
+					.parseClaimsJws(token)
+					.getBody();
 
 			// 5. Obtain the principal/subject stored in the JWT
 			Principal principal = new Principal();
@@ -59,7 +62,6 @@ public class FilterController extends HttpFilter {
 			// 6. Attach an attribute to the request indicating information about the
 			// principal
 			req.setAttribute("principal", principal);
-			System.out.println(principal);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,7 +73,6 @@ public class FilterController extends HttpFilter {
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse resp) {
-		log.info("Attaching CORS headers to HTTP response");
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
 		resp.setHeader("Access-Control-Allow-Headers", "Content-type, Authorization");
