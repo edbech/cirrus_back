@@ -79,7 +79,8 @@ public class GameService {
 
 			System.out.println("\nCreating new game");
 			Game game;
-			if(Math.random() >.5) {
+			Random rand = new Random();
+			if(rand.nextBoolean()) {
 				game = new Game(playerX, playerO, isPublic);
 			} else {
 				game = new Game(playerO, playerX, isPublic);
@@ -228,6 +229,9 @@ public class GameService {
 		if (max == 0) {
 			return 0;
 		}
+		if (max == 9) {
+			return 3;
+		}
 
 		// rows
 		if (getTriadResult(state[0], state[1], state[2])) {
@@ -258,18 +262,12 @@ public class GameService {
 		if (getTriadResult(state[2], state[4], state[6])) {
 			count++;
 		}
-
-		switch (count) {
-		case 0:
+		if(count == 0) {
 			return 0;
-		case 1:
-			if (max % 2 == 0) {
-				return 2;
-			} else {
-				return 1;
-			}
-		default:
-			return 4;
+		}else if (max % 2 == 0) {
+			return 2;
+		} else {
+			return 1;
 		}
 	}
 
