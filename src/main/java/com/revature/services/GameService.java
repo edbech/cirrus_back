@@ -144,10 +144,10 @@ public class GameService {
 				case 0:
 					break;
 				case 1:
-					oldGame.setResult(game.getPlayerX());
+					oldGame.setResult(oldGame.getPlayerX());
 					break;
 				case 2:
-					oldGame.setResult(game.getPlayerO());
+					oldGame.setResult(oldGame.getPlayerO());
 					break;
 				case 3:
 					oldGame.setResult("DRAW");
