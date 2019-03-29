@@ -10,9 +10,9 @@
 	
 		<!-- Database connection properties - driver, URL, username, and password -->
 		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-		<property name="hibernate.connection.url">jdbc:oracle:thin:@java-spark.cswfewwvbe2b.us-east-1.rds.amazonaws.com:1521:ORCL</property>
+		<property name="hibernate.connection.url">{endpoint}</property>
 		<property name="hibernate.connection.username">cirrus_admin</property>
-		<property name="hibernate.connection.password">happyheartyherbivor3</property>
+		<property name="hibernate.connection.password">{password}</property>
 
 		<!-- JDBC connection pool setting -->
 		<property name="connection.pool_size">20</property>
