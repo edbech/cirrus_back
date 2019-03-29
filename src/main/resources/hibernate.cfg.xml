@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<!-- Configure the SessionFactory for our application -->
+	<session-factory>
+	
+		<!-- Database connection properties - driver, URL, username, and password -->
+		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="hibernate.connection.url">jdbc:oracle:thin:@java-spark.cswfewwvbe2b.us-east-1.rds.amazonaws.com:1521:ORCL</property>
+		<property name="hibernate.connection.username">cirrus_admin</property>
+		<property name="hibernate.connection.password">happyheartyherbivor3</property>
+
+		<!-- JDBC connection pool setting -->
+		<property name="connection.pool_size">20</property>
+		<property name="hibernate.c3p0.timeout">60</property>
+		<property name="hibernate.c3p0.min_size">0</property>
+
+		<!-- Select our SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
+
+		<!-- Print any executed SQL to the console (should be disabled in production) -->
+		<property name="show_sql">true</property>
+
+		<!-- Set the current session context -->
+		<property name="current_session_context_class">thread</property>
+	</session-factory>
+</hibernate-configuration>        

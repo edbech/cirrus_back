@@ -23,6 +23,8 @@ hs_err_pid*
 
 # # Created by https://www.gitignore.io/api/eclipse 
 
+# target folder
+target/
 
 ### Eclipse ### 
 .metadata 
@@ -88,9 +90,6 @@ RemoteSystemsTempFiles/
 
 # package-lock.json
 package-lock.json
-
-# hibernate config xml
-hibernate.cfg.xml
 
 # sonarlint modules
 .sonarlint
